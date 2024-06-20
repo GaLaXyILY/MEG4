@@ -100,12 +100,6 @@
 			<artifactId>adventure-text-serializer-bungeecord</artifactId>
 			<version>4.3.3</version>
 		</dependency>
-        <dependency>
-            <groupId>io.lumine</groupId>
-            <artifactId>MythicLib-dist</artifactId>
-            <version>1.6.2-SNAPSHOT</version>
-            <scope>provided</scope>
-		</dependency>
 		<dependency>
             <groupId>com.github.libraryaddict</groupId>
             <artifactId>LibsDisguises</artifactId>
