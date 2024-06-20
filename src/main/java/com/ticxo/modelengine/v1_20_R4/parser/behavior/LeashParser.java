@@ -1,11 +1,11 @@
-package com.ticxo.modelengine.v1_20_R3.parser.behavior;
+package com.ticxo.modelengine.v1_20_R4.parser.behavior;
 
 import com.ticxo.modelengine.api.entity.data.IEntityData;
 import com.ticxo.modelengine.api.model.bone.render.BehaviorRendererParser;
 import com.ticxo.modelengine.api.model.bone.render.renderer.LeashRenderer;
-import com.ticxo.modelengine.v1_20_R3.entity.EntityUtils;
-import com.ticxo.modelengine.v1_20_R3.network.utils.NetworkUtils;
-import com.ticxo.modelengine.v1_20_R3.network.utils.Packets;
+import com.ticxo.modelengine.v1_20_R4.entity.EntityUtils;
+import com.ticxo.modelengine.v1_20_R4.network.utils.NetworkUtils;
+import com.ticxo.modelengine.v1_20_R4.network.utils.Packets;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Map;

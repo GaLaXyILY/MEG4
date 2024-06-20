@@ -1,10 +1,10 @@
-package com.ticxo.modelengine.v1_20_R3.network;
+package com.ticxo.modelengine.v1_20_R4.network;
 
 import com.google.common.collect.Maps;
 import com.ticxo.modelengine.api.nms.network.NetworkHandler;
 import com.ticxo.modelengine.api.utils.ReflectionUtils;
-import com.ticxo.modelengine.v1_20_R3.NMSFields;
-import com.ticxo.modelengine.v1_20_R3.network.utils.Bundler;
+import com.ticxo.modelengine.v1_20_R4.NMSFields;
+import com.ticxo.modelengine.v1_20_R4.network.utils.Bundler;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelPipeline;
 import java.util.Collection;
@@ -19,7 +19,7 @@ import net.minecraft.network.NetworkManager;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.PacketListenerPlayOut;
 import net.minecraft.server.network.PlayerConnection;
-import org.bukkit.craftbukkit.v1_20_R3.entity.CraftPlayer;
+import org.bukkit.craftbukkit.v1_20_R4.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 
 public class NetworkHandlerImpl implements NetworkHandler {

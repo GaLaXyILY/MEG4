@@ -1,11 +1,11 @@
-package com.ticxo.modelengine.v1_20_R3.parser.vfx;
+package com.ticxo.modelengine.v1_20_R4.parser.vfx;
 
 import com.ticxo.modelengine.api.entity.data.IEntityData;
 import com.ticxo.modelengine.api.vfx.render.VFXDisplayRenderer;
 import com.ticxo.modelengine.api.vfx.render.VFXRendererParser;
-import com.ticxo.modelengine.v1_20_R3.entity.EntityUtils;
-import com.ticxo.modelengine.v1_20_R3.network.utils.NetworkUtils;
-import com.ticxo.modelengine.v1_20_R3.network.utils.Packets;
+import com.ticxo.modelengine.v1_20_R4.entity.EntityUtils;
+import com.ticxo.modelengine.v1_20_R4.network.utils.NetworkUtils;
+import com.ticxo.modelengine.v1_20_R4.network.utils.Packets;
 import java.util.HashSet;
 import java.util.Set;
 import net.minecraft.network.PacketDataSerializer;
@@ -17,7 +17,7 @@ import net.minecraft.network.protocol.game.PacketPlayOutSpawnEntity;
 import net.minecraft.network.syncher.DataWatcherRegistry;
 import net.minecraft.world.entity.EntityTypes;
 import net.minecraft.world.phys.Vec3D;
-import org.bukkit.craftbukkit.v1_20_R3.inventory.CraftItemStack;
+import org.bukkit.craftbukkit.v1_20_R4.inventory.CraftItemStack;
 import org.bukkit.entity.Player;
 import org.joml.Quaternionf;
 import org.joml.Vector3f;
