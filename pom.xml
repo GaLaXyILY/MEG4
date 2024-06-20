@@ -39,12 +39,6 @@
 	</properties>
 
 	<repositories>
-		<dependency>
-			<groupId>org.jetbrains</groupId>
-			<artifactId>annotations</artifactId>
-			<version>24.1.0</version>
-		</dependency>
-
         <repository>
             <id>spigotmc-repo</id>
             <url>https://hub.spigotmc.org/nexus/content/repositories/snapshots/</url>
@@ -90,6 +84,11 @@
     </repositories>
 
     <dependencies>
+		<dependency>
+			<groupId>org.jetbrains</groupId>
+			<artifactId>annotations</artifactId>
+			<version>24.1.0</version>
+		</dependency>
 		<dependency>
 			<groupId>net.kyori</groupId>
 			<artifactId>adventure-api</artifactId>
