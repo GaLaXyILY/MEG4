@@ -1,0 +1,51 @@
+Model-Engine:
+  Default-Animations:
+    IDLE: idle
+    WALK: walk
+    STRAFE: strafe
+    JUMP_START: jump_start
+    JUMP: jump
+    JUMP_END: jump_end
+    FLY: fly
+    SPAWN: spawn
+    DEATH: death
+  Print-Script-Warnings: false
+  Use-State-Machine: false
+  Engine-Threads: 4
+  Max-Engine-Threads: 10
+Model-Generator:
+  Register-Post-Server: false
+  Assets-Post-Server: true
+  Compile-Post-Server: true
+  Enable-Error: true
+  Debug-Level: 1
+  Namespace: modelengine
+  Create-Zip: true
+  Create-Atlas: true
+  Create-Shader: true
+  Create-MC_META: true
+  Item-Model: LEATHER_HORSE_ARMOR
+Network-Optimization:
+  Bundle-Everything: false
+  Bundle-Size: 512
+  Cull-Interval: 4
+  Culling-Threads: 4
+  Max-Culling-Threads: 10
+  Vertical-Render-Distance:
+    Enabled: true
+    Vertical-Render-Distance: 32
+    Cull-Type: CULLED
+  Skip-Models-Behind-Viewer:
+    Enabled: true
+    View-Angle: 180
+    Force-Render-Radius: 5
+    Cull-Type: MOVEMENT_ONLY
+  Skip-Blocked-Models:
+    Enabled: true
+    Force-Render-Radius: 5
+    Cull-Type: CULLED
+    Use-Paper-Clip-Method: false
+    Force-Render-Size:
+      Width: 32
+      Height: 32
+#YFb3FXTml0Twc1dtNUT5cDWVtmW3dmeONTQ61kMJRlT4dGRWBTMUFGalB3QvJFW4RjQHd0M
