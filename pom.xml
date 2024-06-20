@@ -29,6 +29,31 @@
 				</configuration>
 			</plugin>
 		</plugins>
+		<plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-shade-plugin</artifactId>
+                <version>3.4.1</version>
+                <configuration>
+                    <relocations>
+                        <relocation>
+                            <pattern>cn.superiormc.ultimateshop.libs.xserieschanged</pattern>
+                            <shadedPattern>cn.superiormc.ultimateshop.libs</shadedPattern>
+                        </relocation>
+                        <relocation>
+                            <pattern>org.bstats</pattern>
+                            <shadedPattern>cn.superiormc.ultimateshop.bstats</shadedPattern>
+                        </relocation>
+                    </relocations>
+                </configuration>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>shade</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
 	</build>
 
 	<properties>
@@ -84,6 +109,11 @@
     </repositories>
 
     <dependencies>
+		<dependency>
+			<groupId>io.netty</groupId>
+			<artifactId>netty-all</artifactId>
+			<version>4.1.93.Final</version>
+			</dependency>
 		<dependency>
             <groupId>io.papermc.paper</groupId>
             <artifactId>paper-api</artifactId>
