@@ -13,7 +13,7 @@ env:
   IMAGE_NAME: ${{ github.repository }}
 
 jobs:
-  build-gradle:
+  build-mvn:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
