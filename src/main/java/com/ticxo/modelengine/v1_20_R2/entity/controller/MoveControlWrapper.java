@@ -53,8 +53,8 @@ public class MoveControlWrapper extends ControllerMove implements MoveController
    }
 
    public void a() {
-      this.isOnGround = this.d.aA();
-      ModeledEntity modeledEntity = ModelEngineAPI.getModeledEntity(this.d.cv());
+      this.isOnGround = this.d.aC();
+      ModeledEntity modeledEntity = ModelEngineAPI.getModeledEntity(this.d.cw());
       if (modeledEntity == null) {
          this.defaultTick();
       } else {
@@ -138,7 +138,7 @@ public class MoveControlWrapper extends ControllerMove implements MoveController
    }
 
    private void disableWaterJumping() {
-      if (this.d.aX()) {
+      if (this.d.aZ()) {
          ReflectionUtils.set(this.d, NMSFields.LIVING_ENTITY_noJumpDelay, 1);
       }
 
@@ -155,14 +155,14 @@ public class MoveControlWrapper extends ControllerMove implements MoveController
    public void globalMove(float x, float y, float z, float speedModifier) {
       float speed = this.getSpeed();
       this.d.w(speed * speedModifier);
-      Vec3D vec = (new Vec3D((double)x, (double)y, (double)z)).b(-this.d.dB() * 0.017453292F);
+      Vec3D vec = (new Vec3D((double)x, (double)y, (double)z)).b(-this.d.dC() * 0.017453292F);
       this.d.C((float)vec.c);
       this.d.B((float)vec.d);
       this.d.A((float)vec.e);
    }
 
    public void jump() {
-      this.d.K().a();
+      this.d.M().a();
    }
 
    public void setVelocity(double x, double y, double z) {
@@ -170,7 +170,7 @@ public class MoveControlWrapper extends ControllerMove implements MoveController
    }
 
    public void addVelocity(double x, double y, double z) {
-      this.d.f(this.d.do().b(x, y, z));
+      this.d.g(this.d.dp().b(x, y, z));
    }
 
    public void nullifyFallDistance() {
@@ -182,15 +182,15 @@ public class MoveControlWrapper extends ControllerMove implements MoveController
    }
 
    public boolean isInWater() {
-      return this.d.aX();
+      return this.d.aZ();
    }
 
    public float getSpeed() {
-      return (float)this.d.b(GenericAttributes.d);
+      return (float)this.d.b(GenericAttributes.m);
    }
 
    public Vector getVelocity() {
-      return CraftVector.toBukkit(this.d.do());
+      return CraftVector.toBukkit(this.d.dp());
    }
 
    public void queuePostTick(Runnable runnable) {
