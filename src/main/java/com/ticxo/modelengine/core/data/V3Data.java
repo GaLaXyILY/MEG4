@@ -67,7 +67,7 @@ public class V3Data {
       bodyController.setStableAngle(this.stableAngle);
       bodyController.setRotationDelay(this.rotationDelay);
       bodyController.setRotationDuration(this.rotationDuration);
-      <undefinedtype> modeledEntity = new ModeledEntityImpl(dummy, (Consumer)null) {
+      ModeledEntityImpl modeledEntity = new ModeledEntityImpl(dummy, (Consumer)null) {
          public void registerSelf() {
          }
       };
