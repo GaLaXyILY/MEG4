@@ -5,9 +5,9 @@ load: STARTUP
 authors:
   - Ticxo
 libraries:
-  - net.kyori:adventure-api:4.14.0
-  - net.kyori:adventure-text-serializer-gson:4.14.0
-  - net.kyori:adventure-text-serializer-bungeecord:4.3.0
+  - net.kyori:adventure-api:4.17.0
+  - net.kyori:adventure-text-serializer-gson:4.17.0
+  - net.kyori:adventure-text-serializer-bungeecord:4.3.3
 commands:
   meg:
     description: All things Model Engine related.
