@@ -138,7 +138,7 @@
             <url>https://s01.oss.sonatype.org/content/repositories/snapshots/</url>
         </repository>
 		<repository>
-            <id>mojang</id>
+            <id>minecraft-repo</id>
             <url>https://libraries.minecraft.net/</url>
         </repository>
 		<repository>
