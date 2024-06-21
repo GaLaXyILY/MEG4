@@ -1,8 +1,11 @@
+/* Decompiler 695ms, total 1244ms, lines 221 */
 package com.ticxo.modelengine.v1_19_R3.parser.behavior;
 
 import com.ticxo.modelengine.api.entity.data.IEntityData;
+import com.ticxo.modelengine.api.model.bone.render.BehaviorRenderer;
 import com.ticxo.modelengine.api.model.bone.render.BehaviorRendererParser;
 import com.ticxo.modelengine.api.model.bone.render.renderer.HeldItemRenderer;
+import com.ticxo.modelengine.api.model.bone.render.renderer.HeldItemRenderer.Item;
 import com.ticxo.modelengine.api.utils.data.tracker.CollectionDataTracker;
 import com.ticxo.modelengine.v1_19_R3.entity.EntityUtils;
 import com.ticxo.modelengine.v1_19_R3.network.utils.NetworkUtils;
@@ -13,7 +16,6 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 import net.minecraft.network.PacketDataSerializer;
-import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.PacketPlayOutEntityDestroy;
 import net.minecraft.network.protocol.game.PacketPlayOutEntityMetadata;
 import net.minecraft.network.protocol.game.PacketPlayOutEntityTeleport;
@@ -46,26 +48,26 @@ public class HeldItemParser implements BehaviorRendererParser<HeldItemRenderer> 
       if (!targets.isEmpty()) {
          Packets set = new Packets();
          Location location = renderer.getActiveModel().getModeledEntity().getBase().getLocation();
-         set.add((Packet)this.pivotSpawn(location, renderer));
-         set.add((Packet)this.pivotData(renderer));
+         set.add(this.pivotSpawn(location, renderer));
+         set.add(this.pivotData(renderer));
          Iterator var5 = renderer.getRendered().values().iterator();
 
-         HeldItemRenderer.Item item;
+         Item item;
          while(var5.hasNext()) {
-            item = (HeldItemRenderer.Item)var5.next();
-            set.add((Packet)this.itemSpawn(location, item));
-            set.add((Packet)this.itemData(item, true));
+            item = (Item)var5.next();
+            set.add(this.itemSpawn(location, item));
+            set.add(this.itemData(item, true));
          }
 
          var5 = renderer.getSpawnQueue().values().iterator();
 
          while(var5.hasNext()) {
-            item = (HeldItemRenderer.Item)var5.next();
-            set.add((Packet)this.itemSpawn(location, item));
-            set.add((Packet)this.itemData(item, true));
+            item = (Item)var5.next();
+            set.add(this.itemSpawn(location, item));
+            set.add(this.itemData(item, true));
          }
 
-         set.add((Packet)this.mount(renderer));
+         set.add(this.mount(renderer));
          NetworkUtils.sendBundled(targets, set);
       }
    }
@@ -73,35 +75,35 @@ public class HeldItemParser implements BehaviorRendererParser<HeldItemRenderer> 
    private void update(Set<Player> targets, HeldItemRenderer renderer) {
       if (!targets.isEmpty()) {
          Packets set = new Packets();
-         set.add((Packet)this.teleport(renderer));
+         set.add(this.teleport(renderer));
          Iterator var4 = renderer.getRendered().values().iterator();
 
          while(var4.hasNext()) {
-            HeldItemRenderer.Item item = (HeldItemRenderer.Item)var4.next();
-            set.add((Packet)this.itemData(item, false));
+            Item item = (Item)var4.next();
+            set.add(this.itemData(item, false));
          }
 
          Location location = renderer.getActiveModel().getModeledEntity().getBase().getLocation();
          Iterator var8 = renderer.getSpawnQueue().values().iterator();
 
          while(var8.hasNext()) {
-            HeldItemRenderer.Item item = (HeldItemRenderer.Item)var8.next();
-            set.add((Packet)this.itemSpawn(location, item));
-            set.add((Packet)this.itemData(item, true));
+            Item item = (Item)var8.next();
+            set.add(this.itemSpawn(location, item));
+            set.add(this.itemData(item, true));
          }
 
-         Map<String, HeldItemRenderer.Item> destroy = renderer.getDestroyQueue();
+         Map<String, Item> destroy = renderer.getDestroyQueue();
          if (!destroy.isEmpty()) {
             PacketDataSerializer buf = NetworkUtils.createByteBuf();
             buf.d(destroy.size());
             destroy.forEach((s, itemx) -> {
                buf.d(itemx.getId());
             });
-            set.add((Packet)(new PacketPlayOutEntityDestroy(buf)));
+            set.add(new PacketPlayOutEntityDestroy(buf));
          }
 
          if (renderer.getPassengers().isDirty()) {
-            set.add((Packet)this.mount(renderer));
+            set.add(this.mount(renderer));
             renderer.getPassengers().clearDirty();
          }
 
@@ -112,13 +114,13 @@ public class HeldItemParser implements BehaviorRendererParser<HeldItemRenderer> 
    private void remove(Set<Player> targets, HeldItemRenderer renderer) {
       if (!targets.isEmpty()) {
          PacketDataSerializer buf = NetworkUtils.createByteBuf();
-         Map<String, HeldItemRenderer.Item> items = renderer.getRendered();
+         Map<String, Item> items = renderer.getRendered();
          buf.d(1 + items.size());
          buf.d(renderer.getId());
          items.forEach((s, item) -> {
             buf.d(item.getId());
          });
-         NetworkUtils.send((Set)targets, new PacketPlayOutEntityDestroy(buf));
+         NetworkUtils.send(targets, new PacketPlayOutEntityDestroy(buf));
       }
    }
 
@@ -136,11 +138,11 @@ public class HeldItemParser implements BehaviorRendererParser<HeldItemRenderer> 
       return new PacketPlayOutEntityMetadata(buf);
    }
 
-   private PacketPlayOutSpawnEntity itemSpawn(Location location, HeldItemRenderer.Item renderer) {
+   private PacketPlayOutSpawnEntity itemSpawn(Location location, Item renderer) {
       return new PacketPlayOutSpawnEntity(renderer.getId(), renderer.getUuid(), location.getX(), location.getY(), location.getZ(), 0.0F, 0.0F, EntityTypes.ae, 0, Vec3D.b, 0.0D);
    }
 
-   private PacketPlayOutEntityMetadata itemData(HeldItemRenderer.Item renderer, boolean spawn) {
+   private PacketPlayOutEntityMetadata itemData(Item renderer, boolean spawn) {
       if (!spawn && !renderer.isDirty()) {
          return null;
       } else {
@@ -203,5 +205,17 @@ public class HeldItemParser implements BehaviorRendererParser<HeldItemRenderer> 
       Objects.requireNonNull(buf);
       set.forEach(buf::d);
       return new PacketPlayOutMount(buf);
+   }
+
+   // $FF: synthetic method
+   // $FF: bridge method
+   public void destroy(BehaviorRenderer var1) {
+      this.destroy((HeldItemRenderer)var1);
+   }
+
+   // $FF: synthetic method
+   // $FF: bridge method
+   public void sendToClients(BehaviorRenderer var1) {
+      this.sendToClients((HeldItemRenderer)var1);
    }
 }

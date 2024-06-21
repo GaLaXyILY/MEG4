@@ -24,13 +24,6 @@ jobs:
          distribution: 'temurin' 
      - name: Install depends 
        run: |
-        curl -o BuildTools.jar https://hub.spigotmc.org/jenkins/job/BuildTools/lastSuccessfulBuild/artifact/target/BuildTools.jar
-        JAVA_HOME_17="JAVA_HOME_17_${RUNNER_ARCH}"
-        "${!JAVA_HOME_17}"/bin/java -jar BuildTools.jar --rev 1.19.3 --compile craftbukkit --remapped
-        "${!JAVA_HOME_17}"/bin/java -jar BuildTools.jar --rev 1.19.4 --compile craftbukkit --remapped
-        "${!JAVA_HOME_17}"/bin/java -jar BuildTools.jar --rev 1.20.1 --compile craftbukkit --remapped
-        "${!JAVA_HOME_17}"/bin/java -jar BuildTools.jar --rev 1.20.2 --compile craftbukkit --remapped
-        "${!JAVA_HOME_17}"/bin/java -jar BuildTools.jar --rev 1.20.4 --compile craftbukkit --remapped
         mvn clean package -DskipTests
        env:
         MAVEN_OPTS: -Xmx2048m --illegal-access=permit
