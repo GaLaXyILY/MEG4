@@ -1,5 +1,5 @@
-/* Decompiler 811ms, total 1315ms, lines 203 */
-package com.ticxo.modelengine.v1_20_R3.entity.controller;
+/* Decompiler 886ms, total 1584ms, lines 203 */
+package com.ticxo.modelengine.v1_20_R2.entity.controller;
 
 import com.ticxo.modelengine.api.nms.entity.wrapper.BodyRotationController;
 import com.ticxo.modelengine.api.utils.math.TMath;
@@ -24,15 +24,15 @@ public class BodyRotationControlWrapper extends EntityAIBodyControl implements B
    public BodyRotationControlWrapper(EntityInsentient mob) {
       super(mob);
       this.mob = mob;
-      this.maxHeadAngle = (float)mob.ab();
-      this.maxBodyAngle = (float)mob.ab();
+      this.maxHeadAngle = (float)mob.Z();
+      this.maxBodyAngle = (float)mob.Z();
       this.minHeadAngle = -this.maxHeadAngle;
       this.minBodyAngle = -this.maxBodyAngle;
    }
 
    public void a() {
       if (this.isMoving()) {
-         this.mob.aU = this.mob.dC();
+         this.mob.aU = this.mob.dB();
          this.rotateHeadIfNecessary();
          this.lastStableYHeadRot = this.mob.aW;
          this.headStableTime = 0;
@@ -60,7 +60,7 @@ public class BodyRotationControlWrapper extends EntityAIBodyControl implements B
    }
 
    public float getXHeadRot() {
-      return this.mob.dE();
+      return this.mob.dD();
    }
 
    public void setXHeadRot(float rot) {
@@ -96,8 +96,8 @@ public class BodyRotationControlWrapper extends EntityAIBodyControl implements B
    }
 
    private boolean isMoving() {
-      double dX = this.mob.dr() - this.mob.K;
-      double dZ = this.mob.dx() - this.mob.M;
+      double dX = this.mob.dq() - this.mob.K;
+      double dZ = this.mob.dw() - this.mob.M;
       return dX * dX + dZ * dZ > 2.500000277905201E-7D;
    }
 
