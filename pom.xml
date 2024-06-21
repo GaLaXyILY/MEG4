@@ -17,22 +17,29 @@
         <maven.compiler.source>${java.version}</maven.compiler.source>
         <maven.compiler.target>${java.version}</maven.compiler.target>
     </properties>
-	
+	<pluginRepositories>
+    <pluginRepository>
+        <id>bytecode.space</id>
+        <url>https://repo.bytecode.space/repository/maven-public/</url>
+    </pluginRepository>
+	</pluginRepositories>
 	
 	<build>
-		<plugin>
-			<groupId>org.apache.maven.plugins</groupId>
-			<artifactId>maven-jar-plugin</artifactId>
-			<version>3.4.1</version>
-			<configuration>
-			<archive>
-				<manifestEntries>
-					<paperweight-mappings-namespace>mojang</paperweight-mappings-namespace>
-				</manifestEntries>
-			</archive>
-		</configuration>
-		</plugin>
+	
         <plugins>
+			<plugin>
+            <groupId>ca.bkaw</groupId>
+            <artifactId>paper-nms-maven-plugin</artifactId>
+            <version>1.4.4</version>
+            <executions>
+                <execution>
+                    <phase>process-classes</phase>
+                    <goals>
+                        <goal>remap</goal>
+                    </goals>
+                </execution>
+            </executions>
+			</plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
@@ -40,6 +47,11 @@
                 <configuration>
                     <source>${java.version}</source>
                     <target>${java.version}</target>
+				<archive>
+					<manifestEntries>
+						<paperweight-mappings-namespace>mojang</paperweight-mappings-namespace>
+					</manifestEntries>
+				</archive>
                 </configuration>
             </plugin>
             <plugin>
@@ -58,7 +70,7 @@
                     </execution>
                 </executions>
             </plugin>
-		<plugin>
+			<plugin>
                 <groupId>net.md-5</groupId>
                 <artifactId>specialsource-maven-plugin</artifactId>
                 <version>2.0.2</version>
@@ -167,7 +179,7 @@
 		<dependency>
             <groupId>io.papermc.paper</groupId>
             <artifactId>paper-api</artifactId>
-            <version>1.20.5-R0.1-SNAPSHOT</version>
+            <version>1.20.4-R0.1-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
