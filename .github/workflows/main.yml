@@ -23,9 +23,16 @@ jobs:
          java-version: '17' 
          distribution: 'temurin' 
      - name: Install depends 
-       run: mvn install 
-     - name: Build with Maven 
-       run: mvn package 
+       run: |
+        curl -o BuildTools.jar https://hub.spigotmc.org/jenkins/job/BuildTools/lastSuccessfulBuild/artifact/target/BuildTools.jar
+        JAVA_HOME_17="JAVA_HOME_17_${RUNNER_ARCH}"
+        "${!JAVA_HOME_17}"/bin/java -jar BuildTools.jar --rev 1.19.2 --compile craftbukkit --remapped
+        "${!JAVA_HOME_17}"/bin/java -jar BuildTools.jar --rev 1.19.3 --compile craftbukkit --remapped
+        "${!JAVA_HOME_17}"/bin/java -jar BuildTools.jar --rev 1.19.4 --compile craftbukkit --remapped
+        "${!JAVA_HOME_17}"/bin/java -jar BuildTools.jar --rev 1.20.1 --compile craftbukkit --remapped
+        "${!JAVA_HOME_17}"/bin/java -jar BuildTools.jar --rev 1.20.2 --compile craftbukkit --remapped
+        "${!JAVA_HOME_17}"/bin/java -jar BuildTools.jar --rev 1.20.4 --compile craftbukkit --remapped
+        mvn package 
      - run: mkdir staging && cp target/*.jar staging 
      - name: Set Release version env variable 
        run: | 
