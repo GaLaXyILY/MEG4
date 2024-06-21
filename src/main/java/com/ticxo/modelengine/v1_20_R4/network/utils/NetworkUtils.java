@@ -1,8 +1,10 @@
+/* Decompiler 1250ms, total 1656ms, lines 288 */
 package com.ticxo.modelengine.v1_20_R4.network.utils;
 
 import com.ticxo.modelengine.api.ModelEngineAPI;
 import com.ticxo.modelengine.api.nms.network.ProtectedPacket;
 import com.ticxo.modelengine.v1_20_R4.network.NetworkHandlerImpl;
+import com.ticxo.modelengine.v1_20_R4.network.utils.Packets.PacketSupplier;
 import io.netty.buffer.Unpooled;
 import java.util.Collection;
 import java.util.Iterator;
@@ -32,13 +34,13 @@ public class NetworkUtils {
       return buf;
    }
 
-   public static Packets.PacketSupplier createPivotSpawn(int id, UUID uuid, Vector3f pos) {
+   public static PacketSupplier createPivotSpawn(int id, UUID uuid, Vector3f pos) {
       return (player) -> {
          return ModelEngineAPI.getPlayerProtocolVersion(player.getUniqueId()) >= 764 ? new PacketPlayOutSpawnEntity(id, uuid, (double)pos.x, (double)pos.y - 0.5D, (double)pos.z, 0.0F, 0.0F, EntityTypes.c, 0, Vec3D.b, 0.0D) : new PacketPlayOutSpawnEntity(id, uuid, (double)pos.x, (double)pos.y - 0.375D, (double)pos.z, 0.0F, 0.0F, EntityTypes.c, 0, Vec3D.b, 0.0D);
       };
    }
 
-   public static Packets.PacketSupplier createPivotTeleport(int id, Vector3f pos) {
+   public static PacketSupplier createPivotTeleport(int id, Vector3f pos) {
       PacketDataSerializer buf = createByteBuf();
       buf.c(id);
       buf.a((double)pos.x);
