@@ -17,11 +17,7 @@
         <maven.compiler.source>${java.version}</maven.compiler.source>
         <maven.compiler.target>${java.version}</maven.compiler.target>
     </properties>
-
-
-	
-	   <build>
-        <defaultGoal>clean install</defaultGoal>
+	<build>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -30,17 +26,12 @@
                 <configuration>
                     <source>${java.version}</source>
                     <target>${java.version}</target>
-                    <includes>
-                        <include>com/ticxo/modelengine/</include>
-                    </includes>
-                    <meminitial>1024m</meminitial>
-                    <maxmem>8192m</maxmem>
                 </configuration>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-shade-plugin</artifactId>
-                <version>3.5.0</version>
+                <version>3.2.4</version>
                 <executions>
                     <execution>
                         <phase>package</phase>
@@ -48,77 +39,45 @@
                             <goal>shade</goal>
                         </goals>
                         <configuration>
-                            <minimizeJar>true</minimizeJar>
                             <createDependencyReducedPom>false</createDependencyReducedPom>
-                            <relocations>
-                                <relocation>
-                                    <pattern>org.bstats</pattern>
-                                    <!-- Replace this with your package! -->
-                                    <shadedPattern>com.ticxo.modelengine</shadedPattern>
-                                </relocation>
-                            </relocations>
                         </configuration>
                     </execution>
                 </executions>
             </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-clean-plugin</artifactId>
-                <version>3.3.1</version>
+		<plugin>
+                <groupId>net.md-5</groupId>
+                <artifactId>specialsource-maven-plugin</artifactId>
+                <version>2.0.2</version>
                 <executions>
                     <execution>
-                        <id>clean-dsf-server</id>
                         <phase>package</phase>
                         <goals>
-                            <goal>clean</goal>
+                            <goal>remap</goal>
                         </goals>
+                        <id>remap-obf</id>
                         <configuration>
-                            <excludeDefaultDirectories>true</excludeDefaultDirectories>
-                            <filesets>
-                                <filesets>
-                                    <directory>${testserver.dir}</directory>
-                                    <includes>
-                                        <include>${project.artifactId}*.jar</include>
-                                    </includes>
-                                </filesets>
-                            </filesets>
+                            <srgIn>org.spigotmc:minecraft-server:1.20.4-R0.1-SNAPSHOT:txt:maps-mojang</srgIn>
+                            <reverse>true</reverse>
+                            <remappedDependencies>org.spigotmc:spigot:1.20.4-R0.1-SNAPSHOT:jar:remapped-mojang</remappedDependencies>
+                            <remappedArtifactAttached>true</remappedArtifactAttached>
+                            <remappedClassifierName>remapped-obf</remappedClassifierName>
                         </configuration>
                     </execution>
-                </executions>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-dependency-plugin</artifactId>
-                <version>3.6.0</version>
-                <executions>
                     <execution>
-                        <id>copy-installed</id>
-                        <phase>install</phase>
+                        <phase>package</phase>
                         <goals>
-                            <goal>copy</goal>
+                            <goal>remap</goal>
                         </goals>
+                        <id>remap-spigot</id>
                         <configuration>
-                            <artifactItems>
-                                <artifactItem>
-                                    <groupId>${project.groupId}</groupId>
-                                    <artifactId>${project.artifactId}</artifactId>
-                                    <version>${project.version}</version>
-                                    <type>${project.packaging}</type>
-                                </artifactItem>
-                            </artifactItems>
-                            <outputDirectory>${testserver.dir}</outputDirectory>
+                            <inputFile>${project.build.directory}/${project.artifactId}-${project.version}-remapped-obf.jar</inputFile>
+                            <srgIn>org.spigotmc:minecraft-server:1.20.4-R0.1-SNAPSHOT:csrg:maps-spigot</srgIn>
+                            <remappedDependencies>org.spigotmc:spigot:1.20.4-R0.1-SNAPSHOT:jar:remapped-obf</remappedDependencies>
                         </configuration>
                     </execution>
                 </executions>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-surefire-plugin</artifactId>
-                <version>3.1.2</version>
             </plugin>
         </plugins>
-
-        <!-- This adds the plugin.yml and config.yml as files that need to be processed. -->
         <resources>
             <resource>
                 <directory>src/main/resources</directory>
