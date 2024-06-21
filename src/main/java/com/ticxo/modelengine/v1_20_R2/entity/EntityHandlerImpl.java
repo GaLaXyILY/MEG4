@@ -10,9 +10,6 @@ import com.ticxo.modelengine.api.model.bone.ModelBone;
 import com.ticxo.modelengine.api.model.bone.type.SubHitbox;
 import com.ticxo.modelengine.api.nms.entity.EntityHandler;
 import com.ticxo.modelengine.api.nms.entity.HitboxEntity;
-import com.ticxo.modelengine.api.nms.entity.EntityHandler.BoxRelToCam;
-import com.ticxo.modelengine.api.nms.entity.EntityHandler.InteractionResult;
-import com.ticxo.modelengine.api.nms.entity.EntityHandler.Point;
 import com.ticxo.modelengine.api.nms.entity.wrapper.BodyRotationController;
 import com.ticxo.modelengine.api.nms.entity.wrapper.LookController;
 import com.ticxo.modelengine.api.nms.entity.wrapper.MoveController;
@@ -39,7 +36,6 @@ import com.ticxo.modelengine.v1_20_R2.entity.navigation.WaterBoundNavigationWrap
 import com.ticxo.modelengine.v1_20_R2.network.patch.PatchedServerGamePacketListener;
 import com.ticxo.modelengine.v1_20_R2.network.utils.NetworkUtils;
 import com.ticxo.modelengine.v1_20_R2.network.utils.Packets;
-import com.ticxo.modelengine.v1_20_R2.network.utils.Packets.PacketSupplier;
 import java.lang.reflect.Field;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -180,7 +176,7 @@ public class EntityHandlerImpl implements EntityHandler {
    }
 
    public void forceDespawn(BaseEntity<?> entity, Player player) {
-      NetworkUtils.send(player, new PacketPlayOutEntityDestroy(new int[]{entity.getEntityId()}));
+      NetworkUtils.send((Player)player, new PacketPlayOutEntityDestroy(new int[]{entity.getEntityId()}));
    }
 
    public void setForcedInvisible(Player player, boolean flag) {
@@ -204,7 +200,7 @@ public class EntityHandlerImpl implements EntityHandler {
          EntityUtils.writeData(buf, 0, DataWatcherRegistry.a, data);
          buf.k(255);
          PacketPlayOutEntityMetadata packet = new PacketPlayOutEntityMetadata(buf);
-         NetworkUtils.send(player, packet);
+         NetworkUtils.send((Player)player, packet);
       }
    }
 
@@ -320,7 +316,7 @@ public class EntityHandlerImpl implements EntityHandler {
       entity.queueLocation((new Vector3f()).set(location.getX(), location.getY(), location.getZ()));
       entity.e(location.getX(), location.getY(), location.getZ());
       ModelEngineAPI.setRenderCanceled(entity.ah(), true);
-      Promise.start(entity.getBukkitEntity()).thenRunSync(() -> {
+      Promise.start((Entity)entity.getBukkitEntity()).thenRunSync(() -> {
          level.b(entity);
          ModelEngineAPI.getInteractionTracker().addHitbox(entity);
       });
@@ -350,27 +346,27 @@ public class EntityHandlerImpl implements EntityHandler {
       }
    }
 
-   public InteractionResult interact(Entity entity, HumanEntity player, EquipmentSlot hand) {
+   public EntityHandler.InteractionResult interact(Entity entity, HumanEntity player, EquipmentSlot hand) {
       net.minecraft.world.entity.Entity var5 = EntityUtils.nms(entity);
       if (var5 instanceof EntityLiving) {
          EntityLiving livingEntity = (EntityLiving)var5;
          EnumInteractionResult result = livingEntity.a(((CraftPlayer)player).getHandle(), hand == EquipmentSlot.HAND ? EnumHand.a : EnumHand.b);
-         InteractionResult var10000;
+         EntityHandler.InteractionResult var10000;
          switch(result) {
          case a:
-            var10000 = InteractionResult.SUCCESS;
+            var10000 = EntityHandler.InteractionResult.SUCCESS;
             break;
          case b:
-            var10000 = InteractionResult.CONSUME;
+            var10000 = EntityHandler.InteractionResult.CONSUME;
             break;
          case c:
-            var10000 = InteractionResult.CONSUME_PARTIAL;
+            var10000 = EntityHandler.InteractionResult.CONSUME_PARTIAL;
             break;
          case d:
-            var10000 = InteractionResult.PASS;
+            var10000 = EntityHandler.InteractionResult.PASS;
             break;
          case e:
-            var10000 = InteractionResult.FAIL;
+            var10000 = EntityHandler.InteractionResult.FAIL;
             break;
          default:
             throw new IncompatibleClassChangeError();
@@ -378,13 +374,13 @@ public class EntityHandlerImpl implements EntityHandler {
 
          return var10000;
       } else {
-         return InteractionResult.FAIL;
+         return EntityHandler.InteractionResult.FAIL;
       }
    }
 
    public void spawnDynamicHitbox(DynamicHitbox hitbox) {
       Vector location = (Vector)hitbox.getPositionTracker().get();
-      final PacketSupplier pivotSpawn = NetworkUtils.createPivotSpawn(DynamicHitbox.getPivotId(), DynamicHitbox.getPivotUUID(), location.toVector3f().add(0.0F, -0.5202F, 0.0F));
+      final Packets.PacketSupplier pivotSpawn = NetworkUtils.createPivotSpawn(DynamicHitbox.getPivotId(), DynamicHitbox.getPivotUUID(), location.toVector3f().add(0.0F, -0.5202F, 0.0F));
       PacketDataSerializer pivotDataBuf = NetworkUtils.createByteBuf();
       pivotDataBuf.c(DynamicHitbox.getPivotId());
       EntityUtils.writeData(pivotDataBuf, 0, DataWatcherRegistry.a, (byte)32);
@@ -423,7 +419,7 @@ public class EntityHandlerImpl implements EntityHandler {
 
    public void destroyDynamicHitbox(DynamicHitbox hitbox) {
       PacketPlayOutEntityDestroy destroy = new PacketPlayOutEntityDestroy(new int[]{DynamicHitbox.getHitboxId(), DynamicHitbox.getPivotId()});
-      NetworkUtils.send(hitbox.getPlayer(), destroy);
+      NetworkUtils.send((Player)hitbox.getPlayer(), destroy);
    }
 
    public void forceUseItem(Player player, EquipmentSlot hand) {
@@ -440,18 +436,18 @@ public class EntityHandlerImpl implements EntityHandler {
             EntityUtils.writeData(buf, 8, DataWatcherRegistry.a, (byte)(hand == EquipmentSlot.HAND ? 1 : 3));
             buf.k(255);
             PacketPlayOutEntityMetadata packet = new PacketPlayOutEntityMetadata(buf);
-            NetworkUtils.send(player, packet);
+            NetworkUtils.send((Player)player, packet);
             Item patt16254$temp = nmsStack.d();
             if (patt16254$temp instanceof InstrumentItem) {
                InstrumentItem instrumentItem = (InstrumentItem)patt16254$temp;
-               Optional<? extends Holder<Instrument>> optional = (Optional)ReflectionUtils.call(instrumentItem, NMSMethods.INSTRUMENT_ITEM_getInstrument, new Object[]{nmsStack});
+               Optional<? extends Holder<Instrument>> optional = (Optional)ReflectionUtils.call(instrumentItem, NMSMethods.INSTRUMENT_ITEM_getInstrument, nmsStack);
                optional.ifPresent((instrumentHolder) -> {
                   Instrument instrument = (Instrument)instrumentHolder.a();
                   Holder<SoundEffect> soundEvent = instrument.a();
                   float f = instrument.c() / 16.0F;
                   RandomSource random = (RandomSource)ReflectionUtils.get(nmsPlayer.dL(), NMSFields.LEVEL_threadSafeRandom);
                   PacketPlayOutEntitySound soundPacket = new PacketPlayOutEntitySound(soundEvent, SoundCategory.c, nmsPlayer, f, 1.0F, random.g());
-                  NetworkUtils.send(player, soundPacket);
+                  NetworkUtils.send((Player)player, soundPacket);
                });
             }
 
@@ -578,38 +574,38 @@ public class EntityHandlerImpl implements EntityHandler {
       CraftWorld world = (CraftWorld)player.getWorld();
       Vec3D start = CraftLocation.toVec3D(player.getEyeLocation());
       BoundingBox box = cullHitbox == null ? entity.getBoundingBox() : cullHitbox.createBoundingBox(entity.getLocation().toVector());
-      if (box.getWidthX() < this.forceRenderWidth && box.getWidthZ() < this.forceRenderWidth && box.getHeight() < this.forceRenderHeight) {
+      if (!(box.getWidthX() >= this.forceRenderWidth) && !(box.getWidthZ() >= this.forceRenderWidth) && !(box.getHeight() >= this.forceRenderHeight)) {
          int minX = MathHelper.a(box.getMinX());
          int minY = MathHelper.a(box.getMinY());
          int minZ = MathHelper.a(box.getMinZ());
          int maxX = MathHelper.c(box.getMaxX()) - 1;
          int maxY = MathHelper.c(box.getMaxY()) - 1;
          int maxZ = MathHelper.c(box.getMaxZ()) - 1;
-         BoxRelToCam relX = BoxRelToCam.from(minX, maxX, MathHelper.a(start.c));
-         BoxRelToCam relY = BoxRelToCam.from(minY, maxY, MathHelper.a(start.d));
-         BoxRelToCam relZ = BoxRelToCam.from(minZ, maxZ, MathHelper.a(start.e));
-         if (relX == BoxRelToCam.INSIDE && relY == BoxRelToCam.INSIDE && relZ == BoxRelToCam.INSIDE) {
+         EntityHandler.BoxRelToCam relX = EntityHandler.BoxRelToCam.from(minX, maxX, MathHelper.a(start.c));
+         EntityHandler.BoxRelToCam relY = EntityHandler.BoxRelToCam.from(minY, maxY, MathHelper.a(start.d));
+         EntityHandler.BoxRelToCam relZ = EntityHandler.BoxRelToCam.from(minZ, maxZ, MathHelper.a(start.e));
+         if (relX == EntityHandler.BoxRelToCam.INSIDE && relY == EntityHandler.BoxRelToCam.INSIDE && relZ == EntityHandler.BoxRelToCam.INSIDE) {
             return false;
          } else {
             LinkedHashSet<Vec3D> points = new LinkedHashSet();
 
             for(int x = minX; x <= maxX; ++x) {
                byte xVisibleFace = 0;
-               byte xVisibleFace = (byte)(xVisibleFace | (x == minX && relX == BoxRelToCam.POSITIVE ? 1 : 0));
-               xVisibleFace = (byte)(xVisibleFace | (x == maxX && relX == BoxRelToCam.NEGATIVE ? 2 : 0));
+               byte xVisibleFace = (byte)(xVisibleFace | (x == minX && relX == EntityHandler.BoxRelToCam.POSITIVE ? 1 : 0));
+               xVisibleFace = (byte)(xVisibleFace | (x == maxX && relX == EntityHandler.BoxRelToCam.NEGATIVE ? 2 : 0));
 
                for(int y = minY; y <= maxY; ++y) {
-                  byte yVisibleFace = (byte)(xVisibleFace | (y == minY && relY == BoxRelToCam.POSITIVE ? 4 : 0));
-                  yVisibleFace = (byte)(yVisibleFace | (y == maxY && relY == BoxRelToCam.NEGATIVE ? 8 : 0));
+                  byte yVisibleFace = (byte)(xVisibleFace | (y == minY && relY == EntityHandler.BoxRelToCam.POSITIVE ? 4 : 0));
+                  yVisibleFace = (byte)(yVisibleFace | (y == maxY && relY == EntityHandler.BoxRelToCam.NEGATIVE ? 8 : 0));
 
                   for(int z = minZ; z <= maxZ; ++z) {
-                     byte visibleFace = (byte)(yVisibleFace | (z == minZ && relZ == BoxRelToCam.POSITIVE ? 16 : 0));
-                     visibleFace = (byte)(visibleFace | (z == maxZ && relZ == BoxRelToCam.NEGATIVE ? 32 : 0));
+                     byte visibleFace = (byte)(yVisibleFace | (z == minZ && relZ == EntityHandler.BoxRelToCam.POSITIVE ? 16 : 0));
+                     visibleFace = (byte)(visibleFace | (z == maxZ && relZ == EntityHandler.BoxRelToCam.NEGATIVE ? 32 : 0));
                      if (visibleFace != 0) {
                         Iterator var23 = EntityHandler.getPoints(visibleFace).iterator();
 
                         while(var23.hasNext()) {
-                           Point point = (Point)var23.next();
+                           EntityHandler.Point point = (EntityHandler.Point)var23.next();
                            points.add(new Vec3D((double)((float)x + point.x), (double)((float)y + point.y), (double)((float)z + point.z)));
                         }
                      }

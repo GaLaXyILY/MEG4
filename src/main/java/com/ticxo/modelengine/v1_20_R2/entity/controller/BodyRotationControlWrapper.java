@@ -1,4 +1,3 @@
-/* Decompiler 886ms, total 1584ms, lines 203 */
 package com.ticxo.modelengine.v1_20_R2.entity.controller;
 
 import com.ticxo.modelengine.api.nms.entity.wrapper.BodyRotationController;

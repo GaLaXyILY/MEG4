@@ -2,53 +2,51 @@ package com.ticxo.modelengine.v1_20_R4.network.utils;
 
 import com.ticxo.modelengine.api.utils.data.NullableHashSet;
 import java.util.Collection;
-import java.util.Iterator;
 import java.util.LinkedHashSet;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.PacketListenerPlayOut;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
-public class Packets extends LinkedHashSet<Packets.PacketSupplier> {
-   public Packets(int initialCapacity, float loadFactor) {
-      super(initialCapacity, loadFactor);
-   }
+public class Packets
+extends LinkedHashSet<PacketSupplier> {
+    public Packets(int initialCapacity, float loadFactor) {
+        super(initialCapacity, loadFactor);
+    }
 
-   public Packets(int initialCapacity) {
-      super(initialCapacity);
-   }
+    public Packets(int initialCapacity) {
+        super(initialCapacity);
+    }
 
-   public Packets() {
-   }
+    public Packets() {
+    }
 
-   public Packets(@NotNull Collection<? extends Packets.PacketSupplier> c) {
-      super(c);
-   }
+    public Packets(@NotNull Collection<? extends PacketSupplier> c) {
+        super(c);
+    }
 
-   public boolean add(Packets.PacketSupplier supplier) {
-      return supplier == null ? false : super.add(supplier);
-   }
+    @Override
+    public boolean add(PacketSupplier supplier) {
+        if (supplier == null) {
+            return false;
+        }
+        return super.add(supplier);
+    }
 
-   public boolean add(Packet<PacketListenerPlayOut> packet) {
-      return this.add((player) -> {
-         return packet;
-      });
-   }
+    @Override
+    public boolean add(Packet<PacketListenerPlayOut> packet) {
+        return this.add((Player player) -> packet);
+    }
 
-   public Collection<Packet<PacketListenerPlayOut>> compile(Player player) {
-      NullableHashSet<Packet<PacketListenerPlayOut>> set = new NullableHashSet();
-      Iterator var3 = this.iterator();
+    public Collection<Packet<PacketListenerPlayOut>> compile(Player player) {
+        NullableHashSet<Packet<PacketListenerPlayOut>> set = new NullableHashSet<Packet<PacketListenerPlayOut>>();
+        for (PacketSupplier supplier : this) {
+            set.add(supplier.supply(player));
+        }
+        return set;
+    }
 
-      while(var3.hasNext()) {
-         Packets.PacketSupplier supplier = (Packets.PacketSupplier)var3.next();
-         set.add(supplier.supply(player));
-      }
-
-      return set;
-   }
-
-   @FunctionalInterface
-   public interface PacketSupplier {
-      Packet<PacketListenerPlayOut> supply(Player var1);
-   }
+    public static interface PacketSupplier {
+        public Packet<PacketListenerPlayOut> supply(Player var1);
+    }
 }
